@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6f4e37">
+  <title>바리스타 필기 학습</title>
+  <link rel="stylesheet" href="style.css?v=dev03-progress-8">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <p class="eyebrow">BARISTA STUDY</p><h1 id="app-title">바리스타 필기 학습</h1>
+      <p id="intro" class="intro">시험을 선택하세요.</p>
+    </header>
+
+    <section id="exam-view" class="app-view">
+      <div class="panel exam-select-panel" aria-labelledby="exam-heading"><h2 id="exam-heading">어떤 시험을 준비하시나요?</h2><div id="exam-list" class="exam-list" role="radiogroup" aria-label="시험 종류"></div></div>
+      <p id="status-message" class="status-message" role="status" aria-live="polite">시험 데이터를 불러오는 중입니다.</p>
+      <button class="close-view-button" type="button" data-close-view="exam">닫기</button>
+    </section>
+
+    <section id="menu-view" class="app-view" aria-labelledby="menu-heading" hidden>
+      <div class="view-heading"><h2 id="menu-heading">어떻게 공부할까요?</h2><button class="text-button" type="button" data-back="exam">시험 선택</button></div>
+      <div class="mode-grid">
+        <button class="mode-card" type="button" data-mode="single"><strong>개별 단원 학습</strong><span>한 단원을 집중해서 공부해요</span></button>
+        <button class="mode-card" type="button" data-mode="multi"><strong>여러 단원 학습</strong><span>원하는 단원을 묶어서 공부해요</span></button>
+        <button class="mode-card" type="button" data-mode="exam"><strong>모의 평가 시험</strong><span>정답 공개 없이 실전처럼 풀어요</span></button>
+        <button id="wrong-note-menu-button" class="mode-card" type="button"><strong>오답노트</strong><span id="wrong-note-menu-count">0문제</span></button>
+      </div>
+      <button class="close-view-button" type="button" data-close-view="menu">닫기</button>
+    </section>
+
+    <section id="wrong-note-view" class="app-view" aria-labelledby="wrong-note-heading" hidden>
+      <div class="view-heading"><h2 id="wrong-note-heading">오답노트</h2><button class="text-button" type="button" data-back="menu">학습 방법 선택</button></div>
+      <div class="panel wrong-note-panel">
+        <p class="wrong-note-total"><span>📝 저장된 오답</span><strong id="wrong-note-total">0문제</strong></p>
+        <div id="wrong-note-sections" class="wrong-note-sections"></div>
+        <p id="wrong-note-empty" class="empty-message" hidden>아직 저장된 오답이 없습니다.</p>
+      </div>
+      <button id="start-wrong-note-button" class="start-button" type="button">오답 다시 풀기</button>
+    </section>
+
+    <section id="setup-view" class="app-view" aria-labelledby="setup-heading" hidden>
+      <div class="view-heading"><div><p id="setup-label" class="step-label"></p><h2 id="setup-heading">단원을 선택하세요</h2></div><button class="text-button" type="button" data-back="menu">학습 방법 선택</button></div>
+      <div class="panel progress-summary-panel">
+        <div class="progress-summary-heading"><strong>전체 학습</strong><span id="overall-progress-text">0 / 0</span></div>
+        <div class="progress-track setup-progress-track" role="progressbar" aria-label="전체 학습 진도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="overall-progress-bar" class="progress-bar"></span></div>
+        <button id="reset-progress-button" class="subtle-danger-button" type="button" aria-controls="reset-confirm" aria-expanded="false">학습 기록 초기화</button>
+      </div>
+      <div class="setup-notices" aria-label="학습 설정 안내">
+        <div id="reset-confirm" class="setup-notice reset-confirm" hidden><p>일반 학습 기록만 초기화합니다. 오답노트는 유지됩니다.</p><div class="inline-actions"><button id="cancel-reset-button" class="text-button" type="button">취소</button><button id="confirm-reset-button" class="danger-button compact" type="button">초기화 하기</button></div></div>
+        <div id="resume-choice" class="setup-notice resume-choice" hidden><p>이 단원에 학습 기록이 있습니다. 어떻게 시작할까요?</p><div class="inline-actions"><button id="resume-button" class="start-button compact-button" type="button">이어서 학습</button><button id="restart-button" class="secondary-button compact-button" type="button">처음부터 학습</button></div></div>
+        <p id="setup-message" class="setup-notice form-message" role="status" aria-live="polite"></p>
+      </div>
+      <div class="panel">
+        <div id="selection-toolbar" class="section-header"><p id="selection-summary" class="selection-summary" aria-live="polite">0개 단원 / 총 0문제</p><div class="selection-actions"><button id="select-all" class="text-button" type="button">전체 선택</button><button id="clear-all" class="text-button" type="button">전체 해제</button></div></div>
+        <div id="section-list" class="section-grid"></div>
+      </div>
+      <fieldset id="order-panel" class="panel option-panel"><legend>출제 순서</legend><label class="option-card"><input type="radio" name="question-order" value="ordered" checked><span><strong>순서대로</strong><small>문제은행 순서로 학습</small></span></label><label class="option-card"><input type="radio" name="question-order" value="random"><span><strong>랜덤</strong><small>문제 순서를 무작위로 섞기</small></span></label></fieldset>
+      <label id="unlearned-only-option" class="panel checkbox-option" hidden><input id="unlearned-only" type="checkbox"><span><strong>학습하지 않은 문제만</strong><small>선택한 단원에서 아직 정답을 확인하지 않은 문제만 출제</small></span></label>
+      <div id="exam-count-panel" class="panel" hidden><h3>시험 문항 수</h3><div id="count-options" class="count-options"></div><label id="custom-count-wrap" class="custom-count" hidden>직접 입력<input id="custom-count" type="number" inputmode="numeric" min="1" placeholder="문항 수"></label><p id="count-message" class="form-message" role="status" aria-live="polite"></p></div>
+      <button id="start-button" class="start-button" type="button" disabled>학습 시작</button>
+    </section>
+
+    <section id="study-view" class="app-view" aria-labelledby="question-heading" hidden>
+      <div class="progress-header"><p id="question-progress" class="question-progress"></p><button id="quit-button" class="text-button" type="button">학습 설정</button></div>
+      <div class="progress-track" aria-hidden="true"><span id="progress-bar" class="progress-bar"></span></div><p id="answer-progress" class="answer-progress" hidden></p>
+      <article class="panel question-panel"><h2 id="question-heading" class="question-text" tabindex="-1"></h2><fieldset id="choice-list" class="choice-list"><legend class="visually-hidden">답 선택</legend></fieldset><div id="answer-feedback" class="answer-feedback" role="status" aria-live="polite" hidden></div><div id="learning-notes" class="learning-notes" hidden></div><button id="remove-wrong-note-button" class="remove-wrong-note-button" type="button" hidden>오답노트에서 제외</button></article>
+      <p id="exam-complete-notice" class="exam-complete-notice" role="status" aria-live="polite" hidden>문제를 모두 풀었습니다. 답안을 확인한 후 시험 문제를 제출해 주세요.</p>
+      <div id="study-actions" class="study-actions"><button id="previous-button" class="secondary-button" type="button" hidden>이전 문제</button><button id="check-button" class="start-button" type="button" disabled>정답 확인</button><button id="next-button" class="start-button" type="button" hidden>다음 문제</button><button id="submit-button" class="danger-button" type="button" hidden>시험 문제 제출하기</button></div>
+      <div id="submit-warning" class="submit-warning" role="alert" hidden><p id="submit-warning-text"></p><div class="inline-actions"><button id="continue-exam-button" class="text-button" type="button">계속 풀기</button><button id="confirm-submit-button" class="danger-button compact" type="button">그래도 제출</button></div></div>
+    </section>
+
+    <section id="result-view" class="app-view result-view" aria-labelledby="result-heading" hidden>
+      <div class="panel result-panel"><p id="result-mark" class="result-mark" aria-hidden="true">✓</p><h2 id="result-heading" tabindex="-1">학습 완료</h2><div id="exam-verdict" class="exam-verdict" hidden><strong id="verdict-text"></strong><span id="score-text"></span></div><dl class="result-grid"><div><dt>전체 문제</dt><dd id="result-total">0</dd></div><div><dt>정답</dt><dd id="result-correct">0</dd></div><div><dt>오답</dt><dd id="result-wrong">0</dd></div><div id="result-unanswered-wrap" hidden><dt>미응답</dt><dd id="result-unanswered">0</dd></div><div id="result-rate-wrap"><dt>정답률</dt><dd id="result-rate">0%</dd></div></dl><div id="section-results" class="section-results" hidden></div></div>
+      <button id="retry-wrong-button" class="start-button" type="button" hidden>틀린 문제 다시 풀기</button><button id="return-button" class="secondary-button full-button" type="button">학습 방법 선택으로 돌아가기</button>
+    </section>
+  </main>
+  <script src="app.js?v=dev03-progress-7" defer></script>
+</body>
+</html>

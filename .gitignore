@@ -1,0 +1,13 @@
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.tmp
+*.log
+
+# Local tooling and dependencies (not required by the static web app)
+node_modules/
+.cache/
