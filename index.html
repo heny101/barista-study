@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#6f4e37">
   <title>바리스타 필기 학습</title>
-  <link rel="stylesheet" href="style.css?v=dev03-progress-8">
+  <link rel="stylesheet" href="style.css?v=dev04-ui-2">
 </head>
 <body>
   <main class="app-shell">
@@ -15,7 +15,8 @@
     </header>
 
     <section id="exam-view" class="app-view">
-      <div class="panel exam-select-panel" aria-labelledby="exam-heading"><h2 id="exam-heading">어떤 시험을 준비하시나요?</h2><div id="exam-list" class="exam-list" role="radiogroup" aria-label="시험 종류"></div></div>
+      <div class="view-heading exam-view-heading"><h2 id="exam-heading">어떤 시험을 준비하시나요?</h2></div>
+      <div id="exam-list" class="exam-list" role="radiogroup" aria-label="시험 종류"></div>
       <p id="status-message" class="status-message" role="status" aria-live="polite">시험 데이터를 불러오는 중입니다.</p>
       <button class="close-view-button" type="button" data-close-view="exam">닫기</button>
     </section>
@@ -65,7 +66,7 @@
 
     <section id="study-view" class="app-view" aria-labelledby="question-heading" hidden>
       <div class="progress-header"><p id="question-progress" class="question-progress"></p><button id="quit-button" class="text-button" type="button">학습 설정</button></div>
-      <div class="progress-track" aria-hidden="true"><span id="progress-bar" class="progress-bar"></span></div><p id="answer-progress" class="answer-progress" hidden></p>
+      <div class="progress-track" aria-hidden="true"><span id="progress-bar" class="progress-bar"></span></div>
       <article class="panel question-panel"><h2 id="question-heading" class="question-text" tabindex="-1"></h2><fieldset id="choice-list" class="choice-list"><legend class="visually-hidden">답 선택</legend></fieldset><div id="answer-feedback" class="answer-feedback" role="status" aria-live="polite" hidden></div><div id="learning-notes" class="learning-notes" hidden></div><button id="remove-wrong-note-button" class="remove-wrong-note-button" type="button" hidden>오답노트에서 제외</button></article>
       <p id="exam-complete-notice" class="exam-complete-notice" role="status" aria-live="polite" hidden>문제를 모두 풀었습니다. 답안을 확인한 후 시험 문제를 제출해 주세요.</p>
       <div id="study-actions" class="study-actions"><button id="previous-button" class="secondary-button" type="button" hidden>이전 문제</button><button id="check-button" class="start-button" type="button" disabled>정답 확인</button><button id="next-button" class="start-button" type="button" hidden>다음 문제</button><button id="submit-button" class="danger-button" type="button" hidden>시험 문제 제출하기</button></div>
@@ -77,6 +78,6 @@
       <button id="retry-wrong-button" class="start-button" type="button" hidden>틀린 문제 다시 풀기</button><button id="return-button" class="secondary-button full-button" type="button">학습 방법 선택으로 돌아가기</button>
     </section>
   </main>
-  <script src="app.js?v=dev03-progress-7" defer></script>
+  <script src="app.js?v=dev04-ui-2" defer></script>
 </body>
 </html>

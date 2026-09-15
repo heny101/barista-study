@@ -26,7 +26,7 @@ const elements = {
   resetProgressButton: $('#reset-progress-button'), resetConfirm: $('#reset-confirm'), cancelResetButton: $('#cancel-reset-button'),
   confirmResetButton: $('#confirm-reset-button'), resumeChoice: $('#resume-choice'), resumeButton: $('#resume-button'), restartButton: $('#restart-button'),
   questionProgress: $('#question-progress'),
-  progressBar: $('#progress-bar'), answerProgress: $('#answer-progress'), questionHeading: $('#question-heading'),
+  progressBar: $('#progress-bar'), questionHeading: $('#question-heading'),
   choiceList: $('#choice-list'), answerFeedback: $('#answer-feedback'), learningNotes: $('#learning-notes'),
   examCompleteNotice: $('#exam-complete-notice'), studyActions: $('#study-actions'),
   previousButton: $('#previous-button'), checkButton: $('#check-button'), nextButton: $('#next-button'),
@@ -372,11 +372,10 @@ function renderQuestion() {
   const isExam = state.sessionType === 'exam';
   elements.studyActions.classList.toggle('exam-actions', isExam);
   elements.checkButton.hidden = isExam; elements.nextButton.hidden = isExam; elements.previousButton.hidden = !isExam;
-  elements.submitButton.hidden = !isExam; elements.answerProgress.hidden = !isExam;
+  elements.submitButton.hidden = !isExam;
   if (isExam) {
     elements.previousButton.disabled = state.currentIndex === 0;
     elements.nextButton.hidden = false; elements.nextButton.textContent = state.currentIndex === total - 1 ? '처음으로' : '다음 문제';
-    elements.answerProgress.textContent = `답변 완료 ${Object.keys(state.examAnswers).length} / ${total}`;
     updateExamCompleteNotice();
   } else {
     elements.checkButton.disabled = true; elements.checkButton.hidden = false; elements.nextButton.hidden = true;
@@ -387,7 +386,6 @@ function renderQuestion() {
 function selectAnswer(answer) {
   if (state.sessionType === 'exam') {
     state.examAnswers[state.questions[state.currentIndex].id] = answer; state.selectedAnswer = answer;
-    elements.answerProgress.textContent = `답변 완료 ${Object.keys(state.examAnswers).length} / ${state.questions.length}`;
     updateExamCompleteNotice();
   } else if (!state.answerChecked) {
     state.selectedAnswer = answer; elements.checkButton.disabled = false;
