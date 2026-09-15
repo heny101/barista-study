@@ -497,7 +497,7 @@ function showResult(result) {
     const passingScore = state.exam.passingScore ?? 60;
     const passed = scoreValue >= passingScore;
     elements.examVerdict.className = `exam-verdict ${passed ? 'pass' : 'fail'}`;
-    elements.verdictText.textContent = passed ? '합격' : '불합격';
+    elements.verdictText.textContent = passed ? '🎉 합격입니다! 😊' : '☕ 불합격입니다. 😢';
     elements.scoreText.textContent = `${score}점`;
     elements.resultMark.className = `result-mark ${passed ? 'pass' : 'fail'}`;
     elements.resultMark.textContent = passed ? '✓' : '!';
