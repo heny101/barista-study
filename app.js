@@ -8,10 +8,12 @@ const state = {
 
 const WRONG_NOTE_STORAGE_KEY = 'baristaStudy.wrongNotes.v1';
 const LEARNING_STORAGE_KEY = 'baristaStudy.learningRecords.v1';
+let deferredInstallPrompt = null;
 
 const $ = (selector) => document.querySelector(selector);
 const elements = {
   appTitle: $('#app-title'), intro: $('#intro'), examView: $('#exam-view'), menuView: $('#menu-view'), setupView: $('#setup-view'),
+  installGuide: $('#install-guide'), installButton: $('#install-button'), installMessage: $('#install-message'),
   wrongNoteView: $('#wrong-note-view'), wrongNoteMenuButton: $('#wrong-note-menu-button'), wrongNoteMenuCount: $('#wrong-note-menu-count'),
   wrongNoteTotal: $('#wrong-note-total'), wrongNoteSections: $('#wrong-note-sections'), wrongNoteEmpty: $('#wrong-note-empty'),
   startWrongNoteButton: $('#start-wrong-note-button'), removeWrongNoteButton: $('#remove-wrong-note-button'),
@@ -44,6 +46,60 @@ const viewIntros = {
   wrongNote: '저장된 오답을 확인하고 다시 학습하세요.', study: '문제를 풀고 정답을 확인하세요.',
   mock: '실전처럼 문제를 풀고 시험을 제출하세요.', result: '학습 결과를 확인하세요.'
 };
+
+function isStandaloneMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function isIOSDevice() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function isIOSSafari() {
+  return isIOSDevice() && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(navigator.userAgent);
+}
+
+function hideInstallGuide() {
+  elements.installGuide.hidden = true;
+  elements.installMessage.hidden = true;
+}
+
+function showInstallMessage(message) {
+  elements.installMessage.textContent = message;
+  elements.installMessage.hidden = false;
+}
+
+async function requestAppInstall() {
+  if (isStandaloneMode()) {
+    hideInstallGuide();
+    return;
+  }
+
+  if (deferredInstallPrompt) {
+    const installPrompt = deferredInstallPrompt;
+    deferredInstallPrompt = null;
+    await installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === 'accepted') hideInstallGuide();
+    return;
+  }
+
+  if (isIOSSafari()) {
+    showInstallMessage("Safari의 공유 버튼을 누른 뒤 '홈 화면에 추가'를 선택하세요.");
+  } else if (isIOSDevice()) {
+    showInstallMessage("Safari에서 이 페이지를 연 뒤 공유 → '홈 화면에 추가'를 선택하세요.");
+  } else {
+    showInstallMessage("브라우저 메뉴에서 '앱 설치' 또는 '홈 화면에 추가'를 선택하세요.");
+  }
+}
+
+function initializeInstallGuide() {
+  if (isStandaloneMode()) {
+    hideInstallGuide();
+    return;
+  }
+  elements.installGuide.hidden = false;
+}
 
 function showView(name) {
   ['exam', 'menu', 'setup', 'wrongNote', 'study', 'result'].forEach((view) => { elements[`${view}View`].hidden = view !== name; });
@@ -568,7 +624,20 @@ elements.continueExamButton.addEventListener('click', () => { elements.submitWar
 elements.quitButton.addEventListener('click', returnToSetup); elements.retryWrongButton.addEventListener('click', retryWrong); elements.returnButton.addEventListener('click', returnToMenu);
 elements.wrongNoteMenuButton.addEventListener('click', renderWrongNote); elements.startWrongNoteButton.addEventListener('click', startWrongNoteReview);
 elements.removeWrongNoteButton.addEventListener('click', removeCurrentWrongNote);
+elements.installButton.addEventListener('click', requestAppInstall);
 
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  if (!isStandaloneMode()) elements.installGuide.hidden = false;
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  hideInstallGuide();
+});
+
+initializeInstallGuide();
 initialize();
 
 if ('serviceWorker' in navigator) {
