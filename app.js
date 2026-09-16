@@ -86,7 +86,7 @@ function showInstallPending() {
 function showInstallComplete() {
   elements.installGuide.hidden = false;
   elements.installButton.hidden = true;
-  showInstallMessage('✓ 설치가 완료되었습니다. 홈 화면에서 바리스타 스터디를 확인해 주세요.');
+  showInstallMessage('✓ 설치 요청이 처리되었습니다. 홈 화면 추가 안내가 나타나면 안내에 따라 완료해 주세요.');
 }
 
 async function requestAppInstall() {
