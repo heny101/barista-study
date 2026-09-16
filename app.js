@@ -77,6 +77,18 @@ function showInstallMessage(message) {
   elements.installMessage.hidden = false;
 }
 
+function showInstallPending() {
+  elements.installButton.textContent = '설치 중…';
+  elements.installButton.disabled = true;
+  showInstallMessage('앱을 설치하고 있습니다. 홈 화면에 아이콘이 나타날 때까지 잠시 기다려 주세요.');
+}
+
+function showInstallComplete() {
+  elements.installGuide.hidden = false;
+  elements.installButton.hidden = true;
+  showInstallMessage('✓ 설치가 완료되었습니다. 홈 화면에서 바리스타 스터디를 확인해 주세요.');
+}
+
 async function requestAppInstall() {
   if (isStandaloneMode()) {
     hideInstallGuide();
@@ -93,7 +105,7 @@ async function requestAppInstall() {
     deferredInstallPrompt = null;
     await installPrompt.prompt();
     const { outcome } = await installPrompt.userChoice;
-    if (outcome === 'accepted') hideInstallGuide();
+    if (outcome === 'accepted') showInstallPending();
     return;
   }
 
@@ -649,7 +661,7 @@ window.addEventListener('beforeinstallprompt', (event) => {
 
 window.addEventListener('appinstalled', () => {
   deferredInstallPrompt = null;
-  hideInstallGuide();
+  showInstallComplete();
 });
 
 initializeInstallGuide();
