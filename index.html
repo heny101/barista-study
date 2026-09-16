@@ -19,15 +19,15 @@
     <header class="app-header">
       <p class="eyebrow">BARISTA STUDY</p><h1 id="app-title">바리스타 필기 학습</h1>
       <p id="intro" class="intro">시험을 선택하세요.</p>
-      <div id="install-guide" class="install-guide" hidden>
-        <button id="install-button" class="install-button" type="button">📱 앱으로 설치</button>
-        <p id="install-message" class="install-message" role="status" aria-live="polite" hidden></p>
-      </div>
     </header>
 
     <section id="exam-view" class="app-view">
       <div class="view-heading exam-view-heading"><h2 id="exam-heading">어떤 시험을 준비하시나요?</h2></div>
       <div id="exam-list" class="exam-list" role="radiogroup" aria-label="시험 종류"></div>
+      <div id="install-guide" class="install-guide" hidden>
+        <button id="install-button" class="install-button" type="button">📱 앱으로 설치</button>
+        <p id="install-message" class="install-message" role="status" aria-live="polite" hidden></p>
+      </div>
       <p id="status-message" class="status-message" role="status" aria-live="polite">시험 데이터를 불러오는 중입니다.</p>
       <button class="close-view-button" type="button" data-close-view="exam">닫기</button>
     </section>

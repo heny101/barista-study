@@ -59,6 +59,14 @@ function isIOSSafari() {
   return isIOSDevice() && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(navigator.userAgent);
 }
 
+function isAndroidDevice() {
+  return /Android/i.test(navigator.userAgent);
+}
+
+function isKakaoInAppBrowser() {
+  return /KAKAOTALK/i.test(navigator.userAgent);
+}
+
 function hideInstallGuide() {
   elements.installGuide.hidden = true;
   elements.installMessage.hidden = true;
@@ -75,6 +83,11 @@ async function requestAppInstall() {
     return;
   }
 
+  if (isAndroidDevice() && isKakaoInAppBrowser()) {
+    showInstallMessage("카카오톡에서는 바로 설치할 수 없습니다. 오른쪽 위 메뉴에서 '다른 브라우저로 열기'를 선택한 뒤 앱을 설치하세요.");
+    return;
+  }
+
   if (deferredInstallPrompt) {
     const installPrompt = deferredInstallPrompt;
     deferredInstallPrompt = null;
@@ -88,6 +101,8 @@ async function requestAppInstall() {
     showInstallMessage("Safari의 공유 버튼을 누른 뒤 '홈 화면에 추가'를 선택하세요.");
   } else if (isIOSDevice()) {
     showInstallMessage("Safari에서 이 페이지를 연 뒤 공유 → '홈 화면에 추가'를 선택하세요.");
+  } else if (isAndroidDevice()) {
+    showInstallMessage('이 브라우저에서 설치 메뉴가 보이지 않으면 Chrome에서 이 페이지를 열어주세요.');
   } else {
     showInstallMessage("브라우저 메뉴에서 '앱 설치' 또는 '홈 화면에 추가'를 선택하세요.");
   }
