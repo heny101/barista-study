@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_PREFIX = 'barista-study-';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 

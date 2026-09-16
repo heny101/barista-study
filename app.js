@@ -84,7 +84,7 @@ async function requestAppInstall() {
   }
 
   if (isAndroidDevice() && isKakaoInAppBrowser()) {
-    showInstallMessage("카카오톡에서는 바로 설치할 수 없습니다. 오른쪽 위 메뉴에서 '다른 브라우저로 열기'를 선택한 뒤 앱을 설치하세요.");
+    showInstallMessage("카카오톡에서는 바로 설치할 수 없습니다. 화면의 ⋮ 메뉴를 누르고 '다른 브라우저로 열기'를 선택한 뒤 앱을 설치하세요.");
     return;
   }
 
