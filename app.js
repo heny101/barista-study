@@ -12,7 +12,8 @@ let deferredInstallPrompt = null;
 
 const $ = (selector) => document.querySelector(selector);
 const elements = {
-  appTitle: $('#app-title'), intro: $('#intro'), examView: $('#exam-view'), menuView: $('#menu-view'), setupView: $('#setup-view'),
+  appTitle: $('#app-title'), introRow: $('#intro-row'), intro: $('#intro'), currentSectionName: $('#current-section-name'),
+  examView: $('#exam-view'), menuView: $('#menu-view'), setupView: $('#setup-view'),
   installGuide: $('#install-guide'), installButton: $('#install-button'), installMessage: $('#install-message'),
   wrongNoteView: $('#wrong-note-view'), wrongNoteMenuButton: $('#wrong-note-menu-button'), wrongNoteMenuCount: $('#wrong-note-menu-count'),
   wrongNoteTotal: $('#wrong-note-total'), wrongNoteSections: $('#wrong-note-sections'), wrongNoteEmpty: $('#wrong-note-empty'),
@@ -131,6 +132,10 @@ function initializeInstallGuide() {
 function showView(name) {
   ['exam', 'menu', 'setup', 'wrongNote', 'study', 'result'].forEach((view) => { elements[`${view}View`].hidden = view !== name; });
   elements.intro.textContent = name === 'study' && state.sessionType === 'exam' ? viewIntros.mock : viewIntros[name];
+  if (name !== 'study') {
+    elements.currentSectionName.hidden = true;
+    elements.introRow.classList.remove('has-current-section');
+  }
   if (name === 'menu') updateWrongNoteMenuCount();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -429,6 +434,10 @@ function startSession(questions, type, source = type) {
 function renderQuestion() {
   const question = state.questions[state.currentIndex];
   const current = state.currentIndex + 1; const total = state.questions.length;
+  const section = state.exam.sections.find((item) => item.id === question.sectionId);
+  elements.currentSectionName.textContent = section ? `▶ ${section.name} ◀` : '';
+  elements.currentSectionName.hidden = !section;
+  elements.introRow.classList.toggle('has-current-section', Boolean(section));
   state.selectedAnswer = state.sessionType === 'exam' ? (state.examAnswers[question.id] || null) : null;
   state.answerChecked = false;
   elements.questionProgress.textContent = `${current} / ${total}`;

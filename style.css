@@ -62,7 +62,9 @@ button { -webkit-tap-highlight-color: transparent; }
   letter-spacing: 0.14em;
 }
 h1 { margin: 0; color: var(--primary-dark); font-size: clamp(2rem, 7vw, 3rem); line-height: 1.15; }
-.intro { margin: 12px 0 0; color: var(--muted); }
+.intro-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.intro { min-width: 0; margin: 0; color: var(--muted); }
+.current-section-name { flex: 0 0 auto; color: var(--primary-dark); white-space: nowrap; }
 .install-guide { margin-top: 14px; }
 .install-button {
   min-height: 44px;
@@ -420,6 +422,9 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 
 @media (max-width: 560px) {
   .app-shell { width: min(100% - 24px, 760px); padding: 30px 0 36px; }
+  .intro-row.has-current-section { gap: 8px; }
+  .intro-row.has-current-section .intro { overflow: hidden; font-size: clamp(0.75rem, 3.5vw, 0.9rem); text-overflow: ellipsis; white-space: nowrap; }
+  .current-section-name { font-size: clamp(0.8rem, 3.7vw, 0.95rem); }
   .panel { padding: 18px; border-radius: 16px; }
   .section-header { display: block; }
   .selection-actions { justify-content: flex-start; margin-top: 14px; }
