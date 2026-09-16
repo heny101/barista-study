@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">바리스타 스터디 앱 아이콘</title>
+  <desc id="desc">진한 갈색 바탕 위 흰색 커피잔과 체크 표시</desc>
+  <rect width="512" height="512" rx="112" fill="#6f4e37"/>
+  <g transform="translate(0 -58)">
+    <path fill="#fff" d="M138 190h211v89c0 75-48 121-106 121s-105-46-105-121v-89Zm211 25h18c30 0 50 28 50 64s-20 64-50 64h-32v-38h28c11 0 17-10 17-26s-6-26-17-26h-14v-38Z"/>
+    <path fill="none" stroke="#6f4e37" stroke-linecap="round" stroke-linejoin="round" stroke-width="25" d="m190 280 35 35 76-80"/>
+    <path fill="#fff" d="M145 410h210a14 14 0 0 1 0 28H145a14 14 0 0 1 0-28Z"/>
+  </g>
+</svg>
