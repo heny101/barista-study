@@ -531,22 +531,30 @@ function removeCurrentWrongNote() {
 function renderLearningNotes(question) {
   const notes = [['explanation', '💡 핵심 포인트'], ['memoryTip', '📌 쉽게 외우기'], ['examTip', '🎯 함정 체크!']].filter(([field]) => typeof question[field] === 'string' && question[field].trim());
   elements.learningNotes.replaceChildren();
-  notes.forEach(([field, title]) => { const card = document.createElement('section'); card.className = 'note-card'; const heading = document.createElement('h3'); heading.textContent = title; const text = document.createElement('p'); appendBoldMarkdown(text, question[field]); card.append(heading, text); elements.learningNotes.append(card); });
+  notes.forEach(([field, title]) => { const card = document.createElement('section'); card.className = 'note-card'; const heading = document.createElement('h3'); heading.textContent = title; const text = document.createElement('p'); appendMarkdown(text, question[field]); card.append(heading, text); elements.learningNotes.append(card); });
   elements.learningNotes.hidden = notes.length === 0;
 }
 
-function appendBoldMarkdown(container, value) {
-  const pattern = /\*\*([^*]+)\*\*/g;
+function appendMarkdown(container, value) {
+  const pattern = /\*\*([^*]+)\*\*|\*([^*]+)\*/g;
   let lastIndex = 0;
   let match;
+
+  const appendText = (text) => {
+    text.split('\n').forEach((line, index) => {
+      if (index > 0) container.append(document.createElement('br'));
+      if (line) container.append(document.createTextNode(line));
+    });
+  };
+
   while ((match = pattern.exec(value)) !== null) {
-    container.append(document.createTextNode(value.slice(lastIndex, match.index)));
-    const strong = document.createElement('strong');
-    strong.textContent = match[1];
-    container.append(strong);
+    appendText(value.slice(lastIndex, match.index));
+    const emphasis = document.createElement(match[1] === undefined ? 'em' : 'strong');
+    emphasis.textContent = match[1] ?? match[2];
+    container.append(emphasis);
     lastIndex = pattern.lastIndex;
   }
-  container.append(document.createTextNode(value.slice(lastIndex)));
+  appendText(value.slice(lastIndex));
 }
 
 function nextQuestion() {
